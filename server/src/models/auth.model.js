@@ -15,7 +15,6 @@ const authSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        select: false,
         validate: [isPassword, 'Please provide a valid password']
     },
     verified: {
@@ -45,7 +44,11 @@ authSchema.pre('save', async function (next) {
 })
 
 authSchema.methods.comparePassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
+    try {
+        return await bcrypt.compare(password, this.password);
+    } catch {
+        return false;
+    }
 }
 
 const Auth = mongoose.model('Auth', authSchema);

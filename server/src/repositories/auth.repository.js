@@ -1,6 +1,6 @@
 import { AUTH_ERRORS } from '../constants.js';
 import { Auth } from '../models/index.js'
-import { ApiError } from '../utils/ApiError.js'
+import { ApiError, handleInternalServerError } from '../utils/index.js'
 import { StatusCodes } from 'http-status-codes'
 
 async function createAuth(email, password) {
@@ -12,15 +12,25 @@ async function createAuth(email, password) {
         await auth.save();
         return auth;
     } catch (error) {
-        if (error instanceof ApiError) {
-            throw error
+        handleInternalServerError(error, AUTH_ERRORS.REPOSITORY_LAYER);
+    }
+}
+
+async function getAuthByEmail(email) {
+    try {
+        const auth = await Auth.findOne({ email });
+        if (!auth) {
+            throw new ApiError(StatusCodes.NOT_FOUND, AUTH_ERRORS.AUTH_NOT_FOUND);
         }
-        throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, AUTH_ERRORS.REPOSITORY_LAYER);
+        return auth;
+    } catch (error) {
+        handleInternalServerError(error, AUTH_ERRORS.REPOSITORY_LAYER);
     }
 }
 
 const authRepository = {
-    createAuth
+    createAuth,
+    getAuthByEmail
 }
 
 export default authRepository;

@@ -7,11 +7,11 @@ function validateFields(req, requiredFields) {
         params: []
     };
 
-    if (requiredFields.body) {
+    if (requiredFields?.body) {
         missingFields.body = requiredFields.body.filter(field => !req.body[field]);
     }
 
-    if (requiredFields.params) {
+    if (requiredFields?.params) {
         missingFields.params = requiredFields.params.filter(field => !req.params[field]);
     }
 

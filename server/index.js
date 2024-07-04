@@ -13,9 +13,14 @@ const corsOptions = {
 
 async function startServer() {
     await connectDB();
-    app.use(cors(corsOptions));
+
     app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+
+    app.use(cors(corsOptions));
+
     app.use('/api', router);
+
     app.listen(PORT, () => {
         console.log(`Server is running on port ${BASE_URL}`);
     });

@@ -1,23 +1,37 @@
-import { StatusCodes } from 'http-status-codes';
-import { authRepository } from '../repositories/index.js'
+import { authRepository, userRepository } from '../repositories/index.js'
 import { AUTH_ERRORS } from '../constants.js';
-import { ApiError } from '../utils/ApiError.js';
+import { ApiError, handleInternalServerError } from '../utils/index.js';
+import { StatusCodes } from 'http-status-codes';
 
-async function createAuth(email, password) {
+async function createAuth(email, password, role, name) {
     try {
-        const auth = await authRepository.createAuth(email, password);
-        return auth;
+        await authRepository.createAuth(email, password);
+        const user = await userRepository.createUser(email, role, name);
+        const token = await user.generateToken();
+        return { email, role, name, token };
     } catch (error) {
-        if (error instanceof ApiError) {
-            throw error
-        } else {
-            throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, AUTH_ERRORS.SERVICE_LAYER);
+        handleInternalServerError(error, AUTH_ERRORS.SERVICE_LAYER);
+    }
+}
+
+async function authenticate(email, password) {
+    try {
+        const auth = await authRepository.getAuthByEmail(email);
+        const isPasswordValid = await auth.comparePassword(password);
+        if (!isPasswordValid) {
+            throw new ApiError(StatusCodes.UNAUTHORIZED, AUTH_ERRORS.INVALID_CREDENTIALS);
         }
+        const user = await userRepository.getUserByEmail(email);
+        const token = await user.generateToken();
+        return { email, role: user.role, name: user.name, token };
+    } catch (error) {
+        handleInternalServerError(error, AUTH_ERRORS.SERVICE_LAYER);
     }
 }
 
 const authService = {
-    createAuth
+    createAuth,
+    authenticate
 }
 
 export default authService;
