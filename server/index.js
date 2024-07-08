@@ -1,5 +1,5 @@
 import express from 'express';
-import { BASE_URL, PORT } from './src/config/serverConfig.js';
+import { BASE_URL, CLIENT_URL, PORT } from './src/config/serverConfig.js';
 import connectDB from './src/config/dbConfig.js';
 import router from './src/routes/index.js';
 import cors from 'cors';
@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser';
 const app = express();
 
 const corsOptions = {
-    origin: BASE_URL,
+    origin: CLIENT_URL,
     credentials: true,
     optionsSuccessStatus: 200,
 };

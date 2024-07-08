@@ -40,6 +40,14 @@ userSchema.methods.generateToken = function () {
     );
 }
 
+userSchema.statics.decodedToken = function (token) {
+    try {
+        return jwt.verify(token, TOKEN_SECRET);
+    } catch {
+        return null;
+    }
+}
+
 const User = mongoose.model('User', userSchema);
 
 export default User;
