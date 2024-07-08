@@ -13,16 +13,20 @@ import { signInSchema } from "@/schema"
 import { useCustomForm } from "@/hooks"
 import { APP_NAME } from "@/constant"
 import { Link } from "react-router-dom";
+import { useContext } from "react"
+import AppContext from "@/context/AppContext"
 
 function SignIn() {
 
+    const { signInUser } = useContext(AppContext);
+
     const form = useCustomForm(signInSchema, {
-        email: "",
-        password: "",
+        email: "kenilkanani16@gmail.com",
+        password: "!@M@lone1",
     })
 
-    function onSubmit(values) {
-        console.log(values)
+    async function onSubmit(values) {
+        await signInUser(values.email, values.password);
     }
 
     return (
