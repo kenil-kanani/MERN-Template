@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
-import { MONGO_URL } from "./serverConfig.js";
-import { DB_NAME } from "../constants.js";
+import { DB_NAME, MONGO_URL } from "./serverConfig.js";
 
 async function connectDB() {
   try {
-    const connectionInstance = await mongoose.connect(`${MONGO_URL}/${DB_NAME}`);
+    const connectionInstance = await mongoose.connect(`${MONGO_URL}`);
     console.log(`Database Connected!! DB Host : ${connectionInstance?.connection.host}`);
   } catch (error) {
     console.log("Database connection failed", error);

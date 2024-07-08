@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { authService } from '../services/index.js'
-import { handleError, handleResponse, validateFields } from '../utils/index.js';
+import { ApiError, handleError, handleResponse, validateFields } from '../utils/index.js';
 
 async function signUp(req, res) {
     try {
@@ -26,9 +26,29 @@ async function signIn(req, res) {
     }
 }
 
+async function me(req, res) {
+    try {
+        const token = req.cookies.token;
+        if (!token) {
+            throw new ApiError(StatusCodes.UNAUTHORIZED, 'Token not found, please login to continue');
+        }
+        const user = await authService.validateToken(token);
+        handleResponse(res, StatusCodes.OK, user, 'User fetched successfully');
+    } catch (error) {
+        handleError(error, res);
+    }
+}
+
+async function logout(_, res) {
+    res.clearCookie('token');
+    handleResponse(res, StatusCodes.OK, null, 'User logged out successfully');
+}
+
 const authController = {
     signUp,
-    signIn
+    signIn,
+    me,
+    logout
 }
 
 export default authController;
