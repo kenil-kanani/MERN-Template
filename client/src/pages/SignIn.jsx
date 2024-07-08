@@ -10,7 +10,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { signInSchema } from "@/schema"
-import { useCustomForm } from "@/hooks"
+import { useAuthRedirect, useCustomForm } from "@/hooks"
 import { APP_NAME } from "@/constant"
 import { Link } from "react-router-dom";
 import { useContext } from "react"
@@ -19,6 +19,8 @@ import AppContext from "@/context/AppContext"
 function SignIn() {
 
     const { signInUser } = useContext(AppContext);
+
+    useAuthRedirect();
 
     const form = useCustomForm(signInSchema, {
         email: "kenilkanani16@gmail.com",

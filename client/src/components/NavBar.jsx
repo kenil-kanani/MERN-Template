@@ -1,10 +1,12 @@
-import { APP_NAME } from '@/constant'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { APP_NAME, ROLE } from '@/constant'
+import AppContext from '@/context/AppContext'
+import React, { useContext, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button } from './ui/button'
 
 const NavBar = () => {
 
-    const navItems = [
+    const withoutAuthNavItems = [
         {
             label: 'Home',
             path: '/',
@@ -27,6 +29,31 @@ const NavBar = () => {
         },
     ]
 
+    const withAuthNavItemsForAdmin = [
+        {
+            label: 'Home',
+            path: '/admin-dashboard',
+        }
+    ]
+
+    const withAuthNavItemsForUser = [
+        {
+            label: 'Home',
+            path: '/user-dashboard',
+        }
+    ]
+
+    const { user, role, logOutUser } = useContext(AppContext)
+
+    const [navItems, setNavItems] = useState(withoutAuthNavItems)
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user) {
+            setNavItems(role === ROLE.ADMIN ? withAuthNavItemsForAdmin : withAuthNavItemsForUser)
+        }
+    }, [user, role])
+
     return (
         <header className="px-4 lg:px-6 h-16 flex items-center">
             <Link to="/" className="flex items-center justify-center">
@@ -42,6 +69,13 @@ const NavBar = () => {
                         {item.label}
                     </Link>
                 ))}
+                {
+                    user && (
+                        <Button variant="outline" onClick={logOutUser}>
+                            Logout
+                        </Button>
+                    )
+                }
             </nav>
         </header>
     )

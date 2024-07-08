@@ -1,9 +1,13 @@
+import { useAuthRedirect } from "@/hooks"
 import { Link } from "react-router-dom"
 
 function Home() {
+
+    useAuthRedirect();
+
     return (
         <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
-            
+
             <main className="flex-1">
                 <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
                     <div className="container px-4 md:px-6">

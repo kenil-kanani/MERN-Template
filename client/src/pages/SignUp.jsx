@@ -10,11 +10,13 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { signUpSchema } from "@/schema"
-import { useCustomForm } from "@/hooks"
+import { useAuthRedirect, useCustomForm } from "@/hooks"
 import { APP_NAME } from "@/constant"
 import { Link } from "react-router-dom";
 
 function SignUp() {
+
+    useAuthRedirect();
 
     const form = useCustomForm(signUpSchema, {
         email: "",
