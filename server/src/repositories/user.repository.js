@@ -1,6 +1,6 @@
 import { AUTH_ERRORS } from '../constants.js';
-import { User } from '../models/index.js'
-import { handleInternalServerError } from '../utils/index.js'
+import { User } from '../models/index.js';
+import { handleInternalServerError } from '../utils/index.js';
 
 async function createUser(email, role, name) {
     try {
@@ -8,6 +8,7 @@ async function createUser(email, role, name) {
         await user.save();
         return user;
     } catch (error) {
+        console.log('REPOSITORY_LAYER_ERROR ::: ', error.message);
         handleInternalServerError(error, AUTH_ERRORS.REPOSITORY_LAYER);
     }
 }
@@ -17,13 +18,25 @@ async function getUserByEmail(email) {
         const user = await User.findOne({ email });
         return user;
     } catch (error) {
+        console.log('REPOSITORY_LAYER_ERROR ::: ', error.message);
+        handleInternalServerError(error, AUTH_ERRORS.REPOSITORY_LAYER);
+    }
+}
+
+async function getUserById(_id) {
+    try {
+        const user = await User.findOne({ _id });
+        return user;
+    } catch (error) {
+        console.log('REPOSITORY_LAYER_ERROR ::: ', error.message);
         handleInternalServerError(error, AUTH_ERRORS.REPOSITORY_LAYER);
     }
 }
 
 const userRepository = {
     createUser,
-    getUserByEmail
-}
+    getUserByEmail,
+    getUserById,
+};
 
 export default userRepository;

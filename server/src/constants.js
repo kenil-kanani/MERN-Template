@@ -6,5 +6,7 @@ export const AUTH_ERRORS = {
     SERVICE_LAYER: 'Something went wrong in the auth service',
     CONTROLLER_LAYER: 'Something went wrong in the auth controller',
     AUTH_NOT_FOUND: 'User not found',
-    INVALID_CREDENTIALS: 'Invalid credentials'
-}
+    INVALID_CREDENTIALS: 'Invalid credentials',
+    INVALID_ACCESS_TOKEN: 'Invalid access token',
+    UNAUTHORIZED: 'Unauthorized request',
+};

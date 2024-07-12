@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { MONGO_URL } from "./serverConfig.js";
-import { DB_NAME } from "../constants.js";
+import { DB_NAME } from "./serverConfig.js";
 
 async function connectDB() {
   try {

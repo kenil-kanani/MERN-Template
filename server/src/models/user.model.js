@@ -40,6 +40,4 @@ userSchema.methods.generateToken = function () {
     );
 }
 
-const User = mongoose.model('User', userSchema);
-
-export default User;
+export const User = mongoose.model('User', userSchema);

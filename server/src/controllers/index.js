@@ -1,7 +1,4 @@
 import authController from './auth.controller.js';
 import userController from './user.controller.js';
-
-export {
-    authController,
-    userController
-};
+import { checkHealth } from './health.controller.js';
+export { authController, userController, checkHealth };
