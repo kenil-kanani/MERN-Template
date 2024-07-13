@@ -28,9 +28,19 @@ async function getAuthByEmail(email) {
     }
 }
 
+async function updateAuth(email, data) {
+    try {
+        const auth = await Auth.findOneAndUpdate({ email }, data);
+        return auth;
+    } catch (error) {
+        handleInternalServerError(error, AUTH_ERRORS.REPOSITORY_LAYER);
+    }
+}
+
 const authRepository = {
     createAuth,
-    getAuthByEmail
+    getAuthByEmail,
+    updateAuth
 }
 
 export default authRepository;

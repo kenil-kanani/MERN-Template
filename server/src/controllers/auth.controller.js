@@ -7,7 +7,6 @@ async function signUp(req, res) {
         validateFields(req, { body: ['email', 'password', 'role', 'name'] });
         const { email, password, role, name } = req.body;
         const user = await authService.createAuth(email, password, role, name);
-        res.cookie('token', user.token, { httpOnly: true, secure: true });
         handleResponse(res, StatusCodes.CREATED, user, 'User created successfully');
     } catch (error) {
         handleError(error, res);
@@ -44,11 +43,22 @@ async function logout(_, res) {
     handleResponse(res, StatusCodes.OK, null, 'User logged out successfully');
 }
 
+async function verifyEmail(req, res) {
+    try {
+        const { token } = req.params;
+        await authService.verifyEmail(token);
+        handleResponse(res, StatusCodes.OK, null, 'Email verified successfully');
+    } catch (error) {
+        handleError(error, res);
+    }
+}
+
 const authController = {
     signUp,
     signIn,
     me,
-    logout
+    logout,
+    verifyEmail
 }
 
 export default authController;

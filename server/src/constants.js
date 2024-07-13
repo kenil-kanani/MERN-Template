@@ -6,5 +6,9 @@ export const AUTH_ERRORS = {
     SERVICE_LAYER: 'Something went wrong in the auth service',
     CONTROLLER_LAYER: 'Something went wrong in the auth controller',
     AUTH_NOT_FOUND: 'User not found',
-    INVALID_CREDENTIALS: 'Invalid credentials'
+    INVALID_CREDENTIALS: 'Invalid credentials',
+    USER_NOT_VERIFIED: 'User not verified. Please verify your email',
+    INVALID_TOKEN: 'Invalid token',
+    VERIFICATION_EMAIL_SENT: 'User verification email sent to your email. Please verify your email to login',
+    VERIFICATION_EMAIL_SENT_RECENTLY: 'User verification email sent recently. Please verify your email.'
 }

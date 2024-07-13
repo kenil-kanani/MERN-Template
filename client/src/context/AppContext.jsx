@@ -1,4 +1,4 @@
-import { getUser, logout, signIn } from "@/api";
+import { getUser, logout, signIn, signUp } from "@/api";
 import { useToast } from "@/components/ui/use-toast";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -53,6 +53,22 @@ const AppProvider = ({ children }) => {
         }
     }
 
+    const signUpUser = async (email, password, name) => {
+        const res = await signUp(email, password, name, "user");
+        if (res && res.data) {
+            toast({
+                title: "We have sent you a verification email, please verify your account to login...",
+                duration: 3000,
+            })
+            navigate("/sign-in")
+        } else {
+            toast({
+                title: res?.message || "Something went wrong while signing up...",
+                duration: 2000,
+            })
+        }
+    }
+
     const logOutUser = async () => {
         await logout();
         setUser(null);
@@ -69,7 +85,8 @@ const AppProvider = ({ children }) => {
         role,
         isLoading,
         signInUser,
-        logOutUser
+        logOutUser,
+        signUpUser
     }
 
     return (

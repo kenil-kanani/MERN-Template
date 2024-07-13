@@ -13,22 +13,25 @@ import { signInSchema } from "@/schema"
 import { useAuthRedirect, useCustomForm } from "@/hooks"
 import { APP_NAME } from "@/constant"
 import { Link } from "react-router-dom";
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import AppContext from "@/context/AppContext"
 
 function SignIn() {
 
-    const { signInUser } = useContext(AppContext);
-
     useAuthRedirect();
+    const { signInUser } = useContext(AppContext);
+    const [isLoading, setIsLoading] = useState(false);
+
 
     const form = useCustomForm(signInSchema, {
-        email: "kenilkanani16@gmail.com",
-        password: "!@M@lone1",
+        email: "",
+        password: "",
     })
 
     async function onSubmit(values) {
+        setIsLoading(true);
         await signInUser(values.email, values.password);
+        setIsLoading(false);
     }
 
     return (
@@ -74,10 +77,15 @@ function SignIn() {
                                         </FormItem>
                                     )}
                                 />
-                                <div className="flex justify-end text-sm text-gray-500 hover:text-gray-700">
+                                <div
+                                    disabled={isLoading}
+                                    className="flex justify-end text-sm text-gray-500 hover:text-gray-700"
+                                >
                                     <Link to="/forgot-password">Forgot Password?</Link>
                                 </div>
-                                <Button className="w-full bg-[#bd1e59] text-white">Sign In with Email</Button>
+                                <Button className="w-full bg-[#bd1e59] text-white" disabled={isLoading}>
+                                    {isLoading ? "Loading..." : "Sign In"}
+                                </Button>
                                 <div className="mt-4 text-sm text-gray-500 hover:text-gray-700 text-center">
                                     <Link to="/sign-up">Don't have an account? Sign Up</Link>
                                 </div>

@@ -14,8 +14,6 @@ const useAuthRedirect = () => {
             } else if (role === ROLE.USER) {
                 navigate('/user-dashboard');
             }
-        } else {
-            navigate('/sign-in');
         }
     }, [user, role, navigate]);
 };
