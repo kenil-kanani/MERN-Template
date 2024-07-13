@@ -9,6 +9,7 @@ async function createAuth(email, password) {
             throw new ApiError(StatusCodes.BAD_REQUEST, AUTH_ERRORS.EMAIL_ALREADY_REGISTERED);
         }
         const auth = new Auth({ email, password });
+        auth.verificationEmailSentAt = new Date();
         await auth.save();
         return auth;
     } catch (error) {

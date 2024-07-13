@@ -1,3 +1,5 @@
+export const APP_NAME = "Hezalt";
+
 export const USER_ROLES = ['user', 'admin'];
 
 export const AUTH_ERRORS = {

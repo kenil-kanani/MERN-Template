@@ -1,14 +1,20 @@
 import { authRepository, userRepository } from '../repositories/index.js'
-import { AUTH_ERRORS } from '../constants.js';
+import { APP_NAME, AUTH_ERRORS } from '../constants.js';
 import { ApiError, handleInternalServerError, sendMail } from '../utils/index.js';
 import { StatusCodes } from 'http-status-codes';
 import User from '../models/user.model.js';
+import { verifyEmailHTML } from '../utils/HTMLTemplate/verifyEmail.js';
 
 async function createAuth(email, password, role, name) {
     try {
         await authRepository.createAuth(email, password);
         const user = await userRepository.createUser(email, role, name);
-        sendMail(email, await user.generateToken());
+        const token = await user.generateToken();
+        sendMail(
+            email,
+            `Welcome to ${APP_NAME} - Verify Your Email`,
+            verifyEmailHTML(token)
+        );
         return { email, role, name };
     } catch (error) {
         handleInternalServerError(error, AUTH_ERRORS.SERVICE_LAYER);
@@ -26,7 +32,11 @@ async function authenticate(email, password) {
         if (!auth.verified) {
             if (new Date() - auth.verificationEmailSentAt > 3 * 60 * 1000) {
                 const token = await user.generateToken();
-                sendMail(email, token);
+                sendMail(
+                    email,
+                    `Welcome to ${APP_NAME} - Verify Your Email`,
+                    verifyEmailHTML(token)
+                );
                 auth.verificationEmailSentAt = new Date();
                 await auth.save();
                 throw new ApiError(StatusCodes.UNAUTHORIZED, AUTH_ERRORS.VERIFICATION_EMAIL_SENT);
