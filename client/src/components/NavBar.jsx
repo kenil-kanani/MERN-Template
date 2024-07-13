@@ -51,6 +51,8 @@ const NavBar = () => {
     useEffect(() => {
         if (user) {
             setNavItems(role === ROLE.ADMIN ? withAuthNavItemsForAdmin : withAuthNavItemsForUser)
+        } else {
+            setNavItems(withoutAuthNavItems)
         }
     }, [user, role])
 

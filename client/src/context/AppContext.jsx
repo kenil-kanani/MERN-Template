@@ -2,6 +2,7 @@ import { getUser, logout, signIn } from "@/api";
 import { useToast } from "@/components/ui/use-toast";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const AppContext = createContext();
 
@@ -24,7 +25,6 @@ const AppProvider = ({ children }) => {
             } else {
                 setUser(null);
                 setRole(null);
-                navigate("/sign-in")
             }
         }
         fetchUser().then(() => setIsLoading(false));
