@@ -20,6 +20,10 @@ const authSchema = new mongoose.Schema({
     verified: {
         type: Boolean,
         default: false,
+    },
+    verificationEmailSentAt: {
+        type: Date,
+        default: new Date(0)
     }
 },
     {

@@ -13,22 +13,30 @@ import { signUpSchema } from "@/schema"
 import { useAuthRedirect, useCustomForm } from "@/hooks"
 import { APP_NAME } from "@/constant"
 import { Link } from "react-router-dom";
+import { useContext, useState } from "react"
+import AppContext from "@/context/AppContext"
 
 function SignUp() {
 
     useAuthRedirect();
+    const { signUpUser } = useContext(AppContext);
+    const [isLoading, setIsLoading] = useState(false);
 
     const form = useCustomForm(signUpSchema, {
+        name: "",
         email: "",
         password: "",
         confirmPassword: "",
     })
 
-    function onSubmit(values) {
+    async function onSubmit(values) {
         if (values.password !== values.confirmPassword) {
             form.setError("confirmPassword", { message: "Passwords do not match" })
             return
         }
+        setIsLoading(true);
+        await signUpUser(values.email, values.password, values.name)
+        setIsLoading(false);
     }
 
     return (
@@ -48,6 +56,19 @@ function SignUp() {
 
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-gray-700">Name</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Name..." {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                                 <FormField
                                     control={form.control}
                                     name="email"
@@ -87,7 +108,12 @@ function SignUp() {
                                         </FormItem>
                                     )}
                                 />
-                                <Button className="w-full bg-[#bd1e59] text-white">Sign Up with Email</Button>
+                                <Button
+                                    disabled={isLoading}
+                                    className="w-full bg-[#bd1e59] text-white"
+                                >
+                                    {isLoading ? "Loading..." : "Sign Up"}
+                                </Button>
                                 <div className="mt-4 text-sm text-gray-500 hover:text-gray-700 text-center">
                                     <Link to="/sign-in">Already have an account? Sign In</Link>
                                 </div>

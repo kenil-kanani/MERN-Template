@@ -9,6 +9,7 @@ async function createAuth(email, password) {
             throw new ApiError(StatusCodes.BAD_REQUEST, AUTH_ERRORS.EMAIL_ALREADY_REGISTERED);
         }
         const auth = new Auth({ email, password });
+        auth.verificationEmailSentAt = new Date();
         await auth.save();
         return auth;
     } catch (error) {
@@ -28,9 +29,19 @@ async function getAuthByEmail(email) {
     }
 }
 
+async function updateAuth(email, data) {
+    try {
+        const auth = await Auth.findOneAndUpdate({ email }, data);
+        return auth;
+    } catch (error) {
+        handleInternalServerError(error, AUTH_ERRORS.REPOSITORY_LAYER);
+    }
+}
+
 const authRepository = {
     createAuth,
-    getAuthByEmail
+    getAuthByEmail,
+    updateAuth
 }
 
 export default authRepository;

@@ -9,3 +9,5 @@ export const TOKEN_EXPIRY = process.env.TOKEN_EXPIRY;
 export const BASE_URL = process.env.BASE_URL;
 export const DB_NAME = process.env.DB_NAME;
 export const CLIENT_URL = process.env.CLIENT_URL;
+export const EMAIL_ID = process.env.EMAIL_ID;
+export const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;

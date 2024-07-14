@@ -3,8 +3,6 @@ import { Link } from "react-router-dom"
 
 function Home() {
 
-    useAuthRedirect();
-
     return (
         <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
 
