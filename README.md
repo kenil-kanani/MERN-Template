@@ -1,0 +1,15 @@
+server env :
+
+```
+BASE_URL=http://localhost:3000
+CLIENT_URL=http://localhost:5173
+PORT=3000
+MONGO_URL=
+TOKEN_SECRET=
+TOKEN_EXPIRY=
+DB_NAME=
+EMAIL_ID=
+EMAIL_PASSWORD=
+```
+
+
